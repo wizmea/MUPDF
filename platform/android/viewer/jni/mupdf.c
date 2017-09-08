@@ -323,7 +323,7 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename)
 	}
 
 	/* 128 MB store for low memory devices. Tweak as necessary. */
-	glo->ctx = ctx = fz_new_context(NULL, NULL, 32 << 20);
+	glo->ctx = ctx = fz_new_context(NULL, NULL, 128 << 20);
 	if (!ctx)
 	{
 		LOGE("Failed to initialise context");
@@ -468,7 +468,7 @@ JNI_FN(MuPDFCore_openBuffer)(JNIEnv * env, jobject thiz, jstring jmagic)
 	}
 
 	/* 128 MB store for low memory devices. Tweak as necessary. */
-	glo->ctx = ctx = fz_new_context(NULL, NULL, 32 << 20);
+	glo->ctx = ctx = fz_new_context(NULL, NULL, 128 << 20);
 	if (!ctx)
 	{
 		LOGE("Failed to initialise context");
@@ -2668,7 +2668,7 @@ JNI_FN(MuPDFCore_saveInternal)(JNIEnv * env, jobject thiz)
 		opts.do_incremental = pdf_can_be_saved_incrementally(ctx, idoc);
 
 		tmp = tmp_path(glo->current_path);
-		LOGE("SAVE 3");
+		LOGE("SAVE 3 %s",glo->current_path);
 		if (tmp)
 		{
 			int written = 0;
@@ -2713,6 +2713,7 @@ JNI_FN(MuPDFCore_saveInternal)(JNIEnv * env, jobject thiz)
 			}
 
 			free(tmp);
+			LOGE("SAVE TRUE END");
 		}
 	}
 }

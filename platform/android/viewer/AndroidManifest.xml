@@ -3,9 +3,10 @@
 	package="com.artifex.mupdfdemo"
 	android:versionCode="50"
 	android:versionName="@string/version"
-	android:debuggable="false"
 	android:installLocation="auto">
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" android:protectionLevel="signature"/>
 	<uses-permission android:name="android.permission.INTERNET" />
 	<supports-screens
 		android:smallScreens="true"
