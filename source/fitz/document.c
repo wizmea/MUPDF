@@ -8,6 +8,7 @@ enum
 #define DEFW (450)
 #define DEFH (600)
 #define DEFEM (12)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,"libmupdf",__VA_ARGS__)
 
 struct fz_document_handler_context_s
 {
@@ -275,11 +276,26 @@ fz_load_links(fz_context *ctx, fz_page *page)
 fz_rect *
 fz_bound_page(fz_context *ctx, fz_page *page, fz_rect *r)
 {
-	if (page && page->bound_page && page && r)
-		return page->bound_page(ctx, page, r);
-	if (r)
-		*r = fz_empty_rect;
-	return r;
+       LOGE("deleteAnnotationInternal: start 1.751 1");
+       	if (page && page->bound_page && page && r){
+            fz_try(ctx)
+            {
+                LOGE("deleteAnnotationInternal: start 1.751 1 0");
+                LOGE("deleteAnnotationInternal: start %s",);
+                return page->bound_page(ctx, page, r);
+            }
+            fz_catch(ctx)
+            {
+               LOGE("deleteAnnotationInternal: start 1.751 ERROR");
+            }
+       	}
+       	LOGE("deleteAnnotationInternal: start 1.751 2");
+       	if (r)
+       		*r = fz_empty_rect;
+       	LOGE("deleteAnnotationInternal: start 1.751 END");
+       	return r;
+
+
 }
 
 fz_annot *

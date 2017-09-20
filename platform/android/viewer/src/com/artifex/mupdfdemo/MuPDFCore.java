@@ -3,6 +3,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -338,7 +339,9 @@ public class MuPDFCore
 	}
 
 	public synchronized void deleteAnnotation(int page, int annot_index) {
+		Log.e("deleteAnn","start delete annottion");
 		gotoPage(page);
+		Log.e("deleteAnn","get ready delete annottion");
 		deleteAnnotationInternal(annot_index);
 	}
 

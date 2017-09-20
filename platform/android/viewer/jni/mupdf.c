@@ -709,9 +709,10 @@ static void update_changed_rects_all_page(globals *glo, page_cache *pc, pdf_docu
 	fz_rect bounds;
 	rect_node *node;
 
-  LOGE("update_changed_rects: start 2");
-	/*fz_bound_page(ctx, page, &node->rect);*/
-
+	LOGE("update_changed_rects: start 2");
+	
+	fz_bound_page(ctx, page, &node->rect);
+	
 	LOGE("update_changed_rects: start 3");
 	drop_changed_rects(ctx, &pc->hq_changed_rects);
 
@@ -723,7 +724,8 @@ static void update_changed_rects_all_page(globals *glo, page_cache *pc, pdf_docu
 	node->rect = bounds;
 	node->next = pc->changed_rects;
 	pc->changed_rects = node;
-
+	
+	
 	LOGE("update_changed_rects: start 6");
 	node = fz_malloc_struct(ctx, rect_node);
 	node->rect = bounds;

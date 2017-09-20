@@ -86,7 +86,6 @@ pdf_create_annot(fz_context *ctx, pdf_page *page, fz_annot_type type)
 		{
 			annot_arr = pdf_new_array(ctx, doc, 0);
 			pdf_dict_put_drop(ctx, page->obj, PDF_NAME_Annots, annot_arr);
-			LOGE("pdf_createAnn annot_arr");
 		}
 
 		pdf_dict_put_drop(ctx, annot_obj, PDF_NAME_Type, PDF_NAME_Annot);
@@ -110,7 +109,15 @@ pdf_create_annot(fz_context *ctx, pdf_page *page, fz_annot_type type)
 		pdf_update_object(ctx, doc, ind_obj_num, annot_obj);
 		ind_obj = pdf_new_indirect(ctx, doc, ind_obj_num, 0);
 		LOGE("pdf_createAnn 2");
-		//pdf_array_push(ctx, annot_arr, ind_obj);
+		//move from here
+		fz_try(ctx)
+		{
+		pdf_array_push(ctx, annot_arr, ind_obj);
+		LOGE("pdf_createAnn annot_arr add");
+		}fz_catch(ctx)
+		{
+			LOGE("pdf_createAnn annot_arr not add");
+		}
 		LOGE("pdf_createAnn 3");
 		annot->obj = pdf_keep_obj(ctx, ind_obj);
 
