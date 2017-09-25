@@ -29,8 +29,9 @@ APP_OPTIM := debug
 APP_CFLAGS := -O2
 else
 ifdef DEBUG
-APP_OPTIM := debug
-APP_CFLAGS := -DDEBUG
+APP_OPTIM := release
+#APP_OPTIM := debug
+#APP_CFLAGS := -DDEBUG
 else
 APP_OPTIM := release
 endif

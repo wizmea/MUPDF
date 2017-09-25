@@ -1,4 +1,6 @@
 #include "mupdf/fitz.h"
+#include <stdio.h>
+#include <setjmp.h>
 
 enum
 {
@@ -9,6 +11,11 @@ enum
 #define DEFH (600)
 #define DEFEM (12)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,"libmupdf",__VA_ARGS__)
+
+#define TRY do{ jmp_buf ex_buf__; if( !setjmp(ex_buf__) ){
+#define CATCH } else {
+#define ETRY } }while(0)
+#define THROW longjmp(ex_buf__, 1)
 
 struct fz_document_handler_context_s
 {
@@ -273,29 +280,54 @@ fz_load_links(fz_context *ctx, fz_page *page)
 	return NULL;
 }
 
+//fz_rect *
 fz_rect *
 fz_bound_page(fz_context *ctx, fz_page *page, fz_rect *r)
 {
        LOGE("deleteAnnotationInternal: start 1.751 1");
        	if (page && page->bound_page && page && r){
-            fz_try(ctx)
-            {
                 LOGE("deleteAnnotationInternal: start 1.751 1 0");
-                LOGE("deleteAnnotationInternal: start %s",);
-                return page->bound_page(ctx, page, r);
-            }
-            fz_catch(ctx)
-            {
-               LOGE("deleteAnnotationInternal: start 1.751 ERROR");
-            }
+                TRY
+                   {
+                     return page->bound_page(ctx, page, r);
+                   }
+                   CATCH
+                   {
+                      LOGE("deleteAnnotationInternal: start 1.751 ERROR");
+                   }
+                   ETRY;
+
        	}
        	LOGE("deleteAnnotationInternal: start 1.751 2");
        	if (r)
        		*r = fz_empty_rect;
        	LOGE("deleteAnnotationInternal: start 1.751 END");
        	return r;
+}
 
+fz_rect *
+fz_bound_pagee(fz_context *ctx, fz_page *page, fz_rect *r)
+{
+   LOGE("deleteAnnotationInternal: start 1.751 SPECIAL");
+   LOGE("deleteAnnotationInternal: start 1.751 1");
+          	if (page && page->bound_page && page && r){
+                   LOGE("deleteAnnotationInternal: start 1.751 1 0");
+                   TRY
+                      {
+                        return page->bound_page(ctx, page, &r);
+                      }
+                      CATCH
+                      {
+                         LOGE("deleteAnnotationInternal: start 1.751 ERROR");
+                      }
+                      ETRY;
 
+          	}
+          	LOGE("deleteAnnotationInternal: start 1.751 2");
+          	if (r)
+          		*r = fz_empty_rect;
+          	LOGE("deleteAnnotationInternal: start 1.751 END");
+          	return r;
 }
 
 fz_annot *

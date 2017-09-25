@@ -710,9 +710,9 @@ static void update_changed_rects_all_page(globals *glo, page_cache *pc, pdf_docu
 	rect_node *node;
 
 	LOGE("update_changed_rects: start 2");
-	
+
 	fz_bound_page(ctx, page, &node->rect);
-	
+
 	LOGE("update_changed_rects: start 3");
 	drop_changed_rects(ctx, &pc->hq_changed_rects);
 
@@ -724,13 +724,47 @@ static void update_changed_rects_all_page(globals *glo, page_cache *pc, pdf_docu
 	node->rect = bounds;
 	node->next = pc->changed_rects;
 	pc->changed_rects = node;
-	
-	
+
+
 	LOGE("update_changed_rects: start 6");
 	node = fz_malloc_struct(ctx, rect_node);
 	node->rect = bounds;
 	node->next = pc->hq_changed_rects;
 	pc->hq_changed_rects = node;
+
+}
+
+void update_changed_rects_all_pagee(globals *glo, page_cache *pc, pdf_document *idoc)
+{
+	LOGE("update_changed_rects: SPE start 1");
+	fz_context *ctx = glo->ctx;
+	fz_page *page = pc->page;
+	fz_rect bounds;
+	rect_node *node;
+
+	LOGE("update_changed_rects: start 2");
+
+	fz_bound_pagee(ctx, page, &node->rect);
+
+	LOGE("update_changed_rects: start 3");
+	drop_changed_rects(ctx, &pc->hq_changed_rects);
+
+	LOGE("update_changed_rects: start 4");
+	drop_changed_rects(ctx, &pc->changed_rects);
+
+	LOGE("update_changed_rects: start 5");
+	node = fz_malloc_struct(ctx, rect_node);
+	node->rect = bounds;
+	node->next = pc->changed_rects;
+	pc->changed_rects = node;
+
+
+	LOGE("update_changed_rects: start 6");
+	node = fz_malloc_struct(ctx, rect_node);
+	node->rect = bounds;
+	node->next = pc->hq_changed_rects;
+	pc->hq_changed_rects = node;
+
 }
 
 JNIEXPORT jboolean JNICALL
@@ -1813,7 +1847,7 @@ JNI_FN(MuPDFCore_deleteAnnotationInternal)(JNIEnv * env, jobject thiz, int annot
 			LOGE("deleteAnnotationInternal: start 1.75");
 			pdf_delete_annot(ctx, (pdf_page *)pc->page, (pdf_annot *)annot);
 			LOGE("deleteAnnotationInternal: start 1.751");
-			update_changed_rects_all_page(glo, pc, idoc);
+			update_changed_rects_all_pagee(glo, pc, idoc);
 			LOGE("deleteAnnotationInternal: start 1.752");
 			dump_annotation_display_lists(glo);
 			LOGE("deleteAnnotationInternal: start 2");
